@@ -18,6 +18,13 @@ Citizen.CreateThread(function()
 				if (GetPedInVehicleSeat(vehicle[1], -1) == GetPlayerPed(-1)) or IsVehicleSeatFree(vehicle[1], -1) then
 					SetVehicleEngineOn(vehicle[1], vehicle[2], true, false)
 					SetVehicleJetEngineOn(vehicle[1], vehicle[2])
+					if not IsPedInAnyVehicle(GetPlayerPed(-1), false) or (IsPedInAnyVehicle(GetPlayerPed(-1), false) and vehicle[1]~= GetVehiclePedIsIn(GetPlayerPed(-1), false)) then
+						if IsThisModelAHeli(GetEntityModel(vehicle[1])) or IsThisModelAPlane(GetEntityModel(vehicle[1])) then
+							if vehicle[2] then
+								SetHeliBladesFullSpeed(vehicle[1])
+							end
+						end
+					end
 				end
 			else
 				table.remove(vehicles, i)
@@ -38,6 +45,11 @@ AddEventHandler('Engine', function()
 	if IsPedInAnyVehicle(GetPlayerPed(-1), false) then 
 		if (GetPedInVehicleSeat(veh, -1) == GetPlayerPed(-1)) then
 			vehicles[StateIndex][2] = not GetIsVehicleEngineRunning(veh)
+			if vehicles[StateIndex][2] then
+				TriggerEvent("chatMessage", "", {0, 255, 0}, "Engine turned ON!")
+			else
+				TriggerEvent("chatMessage", "", {255, 0, 0}, "Engine turned OFF!")
+			end
 		end 
     end 
 end)
