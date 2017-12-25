@@ -1,9 +1,10 @@
 -- CLIENTSIDED
 
 -- Registers a network event
-RegisterNetEvent('Engine')
+RegisterNetEvent('EngineToggle:Engine')
+RegisterNetEvent('EngineToggle:RPDamage')
 
-local vehicles = {}
+local vehicles = {}; RPWorking = true
 
 Citizen.CreateThread(function()
 	while true do
@@ -16,12 +17,14 @@ Citizen.CreateThread(function()
 		for i, vehicle in ipairs(vehicles) do
 			if DoesEntityExist(vehicle[1]) then
 				if (GetPedInVehicleSeat(vehicle[1], -1) == GetPlayerPed(-1)) or IsVehicleSeatFree(vehicle[1], -1) then
-					SetVehicleEngineOn(vehicle[1], vehicle[2], true, false)
-					SetVehicleJetEngineOn(vehicle[1], vehicle[2])
-					if not IsPedInAnyVehicle(GetPlayerPed(-1), false) or (IsPedInAnyVehicle(GetPlayerPed(-1), false) and vehicle[1]~= GetVehiclePedIsIn(GetPlayerPed(-1), false)) then
-						if IsThisModelAHeli(GetEntityModel(vehicle[1])) or IsThisModelAPlane(GetEntityModel(vehicle[1])) then
-							if vehicle[2] then
-								SetHeliBladesFullSpeed(vehicle[1])
+					if RPWorking then
+						SetVehicleEngineOn(vehicle[1], vehicle[2], true, false)
+						SetVehicleJetEngineOn(vehicle[1], vehicle[2])
+						if not IsPedInAnyVehicle(GetPlayerPed(-1), false) or (IsPedInAnyVehicle(GetPlayerPed(-1), false) and vehicle[1]~= GetVehiclePedIsIn(GetPlayerPed(-1), false)) then
+							if IsThisModelAHeli(GetEntityModel(vehicle[1])) or IsThisModelAPlane(GetEntityModel(vehicle[1])) then
+								if vehicle[2] then
+									SetHeliBladesFullSpeed(vehicle[1])
+								end
 							end
 						end
 					end
@@ -33,7 +36,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
-AddEventHandler('Engine', function()
+AddEventHandler('EngineToggle:Engine', function()
 	local veh
 	local StateIndex
 	for i, vehicle in ipairs(vehicles) do
@@ -42,16 +45,21 @@ AddEventHandler('Engine', function()
 			StateIndex = i
 		end
 	end
+	Citizen.Wait(1500)
 	if IsPedInAnyVehicle(GetPlayerPed(-1), false) then 
 		if (GetPedInVehicleSeat(veh, -1) == GetPlayerPed(-1)) then
 			vehicles[StateIndex][2] = not GetIsVehicleEngineRunning(veh)
 			if vehicles[StateIndex][2] then
-				TriggerEvent("chatMessage", "", {0, 255, 0}, "Engine turned ON!")
+				TriggerEvent('chatMessage', '', {0, 255, 0}, 'Engine turned ON!')
 			else
-				TriggerEvent("chatMessage", "", {255, 0, 0}, "Engine turned OFF!")
+				TriggerEvent('chatMessage', '', {255, 0, 0}, 'Engine turned OFF!')
 			end
 		end 
     end 
+end)
+
+AddEventHandler('EngineToggle:RPDamage', function(State)
+	RPWorking = State
 end)
 
 function table.contains(table, element)

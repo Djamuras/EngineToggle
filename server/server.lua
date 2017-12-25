@@ -1,9 +1,9 @@
-local CurrentVersion = '2.1.0'
+local CurrentVersion = '2.2.0'
 
 AddEventHandler('chatMessage', function(source, n, msg)
 	local Message = string.lower(msg)
 	if (Message == "/engine") then
-		TriggerClientEvent('Engine', source)
+		TriggerClientEvent('EngineToggle:Engine', source)
 		CancelEvent()
 	end
 end)
@@ -20,7 +20,7 @@ PerformHttpRequest("https://raw.githubusercontent.com/Flatracer/EngineToggle_Res
 		if CurrentVersion ~= NewestVersion then
 			print('##### Outdated, please check the Topic for the newest Version! #####')
 			print('####################################################################')
-			print('CHANGES: ' .. Changes)
+			print('CHANGES:\n' .. Changes)
 		else
 			print('#####                        Up to date!                       #####')
 			print('####################################################################')
