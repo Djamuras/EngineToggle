@@ -1,11 +1,14 @@
 resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
 
-description 'Engine Toggle' -- Resource Descrption
+description 'Toggles the vehicle engine'	-- Resource Description
 
-client_script {
+server_script {								-- Server Scripts
+	'config.lua',
+	'server/server.lua',
+}
+
+client_script {								-- Client Scripts
+	'config.lua',
 	'client/client.lua',
 }
 
-server_script {
-	'server/server.lua',
-}

@@ -1,30 +1,34 @@
-local CurrentVersion = '2.2.0'
+if not UseKey then
+	RegisterCommand("engine", function(Source, Arguments, RawCommand)
+		if #Arguments == 0 then
+			TriggerClientEvent('EngineToggle:Engine', Source)
+		end
+	end, false)
+end
 
-AddEventHandler('chatMessage', function(source, n, msg)
-	local Message = string.lower(msg)
-	if (Message == "/engine") then
-		TriggerClientEvent('EngineToggle:Engine', source)
-		CancelEvent()
-	end
-end)
+local CurrentVersion = '2.3.0'
+local GithubResourceName = 'EngineToggle'
 
-PerformHttpRequest("https://raw.githubusercontent.com/Flatracer/EngineToggle_Resources/master/VERSION", function(Error, NewestVersion, Header)
-	PerformHttpRequest('https://raw.githubusercontent.com/Flatracer/EngineToggle_Resources/master/CHANGES', function(Error, Changes, Header)
+PerformHttpRequest('https://raw.githubusercontent.com/Flatracer/FiveM_Resources/master/' .. GithubResourceName .. '/VERSION', function(Error, NewestVersion, Header)
+	PerformHttpRequest('https://raw.githubusercontent.com/Flatracer/FiveM_Resources/master/' .. GithubResourceName .. '/CHANGES', function(Error, Changes, Header)
 		print('\n')
-		print('####################################################################')
-		print("########################## Engine Toggle ###########################")
-		print('####################################################################')
-		print('#####                  Current Version: ' .. CurrentVersion .. '                  #####')
-		print('#####                   Newest Version: ' .. NewestVersion .. '                  #####')
-		print('####################################################################')
+		print('##############')
+		print('## ' .. GetCurrentResourceName())
+		print('##')
+		print('## Current Version: ' .. CurrentVersion)
+		print('## Newest Version: ' .. NewestVersion)
+		print('##')
 		if CurrentVersion ~= NewestVersion then
-			print('##### Outdated, please check the Topic for the newest Version! #####')
-			print('####################################################################')
-			print('CHANGES:\n' .. Changes)
+			print('## Outdated')
+			print('## Check the Topic')
+			print('## For the newest Version!')
+			print('##############')
+			print('CHANGES: ' .. Changes)
 		else
-			print('#####                        Up to date!                       #####')
-			print('####################################################################')
+			print('## Up to date!')
+			print('##############')
 		end
 		print('\n')
 	end)
 end)
+

@@ -9,6 +9,11 @@ local vehicles = {}; RPWorking = true
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
+		if UseKey and ToggleKey then
+			if IsControlJustReleased(1, ToggleKey) then
+				TriggerEvent('EngineToggle:Engine')
+			end
+		end
 		if GetSeatPedIsTryingToEnter(GetPlayerPed(-1)) == -1 and not table.contains(vehicles, GetVehiclePedIsTryingToEnter(GetPlayerPed(-1))) then
 			table.insert(vehicles, {GetVehiclePedIsTryingToEnter(GetPlayerPed(-1)), IsVehicleEngineOn(GetVehiclePedIsTryingToEnter(GetPlayerPed(-1)))})
 		elseif IsPedInAnyVehicle(GetPlayerPed(-1), false) and not table.contains(vehicles, GetVehiclePedIsIn(GetPlayerPed(-1), false)) then
@@ -61,6 +66,23 @@ end)
 AddEventHandler('EngineToggle:RPDamage', function(State)
 	RPWorking = State
 end)
+
+if OnAtEnter then
+	Citizen.CreateThread(function()
+		while true do
+			Citizen.Wait(0)
+			if GetSeatPedIsTryingToEnter(GetPlayerPed(-1)) == -1 then
+				for i, vehicle in ipairs(vehicles) do
+					if vehicle[1] == GetVehiclePedIsTryingToEnter(GetPlayerPed(-1)) and not vehicle[2] then
+						Citizen.Wait(3500)
+						vehicle[2] = true
+						TriggerEvent('chatMessage', '', {0, 255, 0}, 'Engine turned ON!')
+					end
+				end
+			end
+		end
+	end)
+end
 
 function table.contains(table, element)
   for _, value in pairs(table) do
