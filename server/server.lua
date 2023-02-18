@@ -6,7 +6,7 @@ if not UseKey then
 	end, false)
 end
 
-local CurrentVersion = '2.3.0'
+local CurrentVersion = '2.3.1'
 local GithubResourceName = 'EngineToggle'
 
 PerformHttpRequest('https://raw.githubusercontent.com/Flatracer/FiveM_Resources/master/' .. GithubResourceName .. '/VERSION', function(Error, NewestVersion, Header)
