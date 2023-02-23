@@ -21,8 +21,9 @@ Citizen.CreateThread(function()
 		end
 		for i, vehicle in ipairs(vehicles) do
 			if DoesEntityExist(vehicle[1]) then
-				if (GetVehicleEngineHealth(vehicle[1]) < 0) then
+				if (GetVehicleEngineHealth(vehicle[1]) <= -4000) then
 					table.remove(vehicles, i)
+					print("rimosso")
 				end
 				if (GetPedInVehicleSeat(vehicle[1], -1) == GetPlayerPed(-1)) or IsVehicleSeatFree(vehicle[1], -1) then
 					if RPWorking then
